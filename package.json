@@ -1,0 +1,11 @@
+{
+  "name": "evstore",
+  "version": "0.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:jas-chen/evstore.git",
+  "author": "Jas Chen <jaschen.tw@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "mitt": "^1.2.0"
+  }
+}
