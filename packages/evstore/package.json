@@ -1,7 +1,7 @@
 {
   "name": "@jas-chen/evstore",
   "description": "Event based state management library.",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "source": "src/index.js",
   "main": "dist/evstore.js",
   "module": "dist/evstore.module.js",
@@ -10,7 +10,7 @@
   "author": "Jas Chen <jaschen.tw@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "rm -rf dist && microbundle",
+    "build": "rm -rf dist && microbundle --globals mitt=mitt",
     "dev": "microbundle watch",
     "prepublishOnly": "yarn build"
   },
