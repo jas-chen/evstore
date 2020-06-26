@@ -36,3 +36,7 @@ const App = () => (
 
 ReactDOM.render(<App />, document.getElementById('root'));
 ```
+
+## License
+
+[MIT License](https://opensource.org/licenses/MIT)
