@@ -15,7 +15,7 @@ yarn add @jas-chen/evstore
 ## Usage
 
 It's an event emitter just like [mitt](https://github.com/developit/mitt)
-```
+```js
 import evstore from '@jas-chen/evstore';
 
 const container = evstore.create();
@@ -36,13 +36,13 @@ container.off('foo', onFoo)  // unlisten
 ```
 
 However you can create stores and store values on it
-```
+```js
 container.register('year', 2020);
 container.get('year'); // 2020
 ```
 
 Update and watch a store
-```
+```js
 container.on('time', console.log);
 
 container.register(
@@ -55,7 +55,7 @@ container.register(
 ```
 
 Once a store is registered, it cannot be emited from outside
-```
+```js
 container.emit('time', 12345); // throws an error
 ```
 
@@ -107,7 +107,7 @@ ReactDOM.render(<App />, document.getElementById('root'));
 ```
 
 #### Timer example
-```
+```js
 import React from 'react';
 import ReactDOM from 'react-dom';
 import evstore from '@jas-chen/evstore';
