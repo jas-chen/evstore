@@ -1,21 +1,4 @@
 {
-  "name": "evstore",
-  "version": "0.0.0",
-  "source": "src/index.js",
-  "main": "dist/evstore.js",
-  "module": "dist/evstore.module.js",
-  "unpkg": "dist/evstore.umd.js",
-  "repository": "git@github.com:jas-chen/evstore.git",
-  "author": "Jas Chen <jaschen.tw@gmail.com>",
-  "license": "MIT",
-  "scripts": {
-    "build": "rm -rf dist && microbundle",
-    "dev": "microbundle watch"
-  },
-  "dependencies": {
-    "mitt": "^1.2.0"
-  },
-  "devDependencies": {
-    "microbundle": "^0.12.2"
-  }
+  "private": true,
+  "workspaces": ["packages/evstore", "packages/evstore-react"]
 }

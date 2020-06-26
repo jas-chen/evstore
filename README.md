@@ -6,18 +6,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import evstore from 'evstore';
-import { Provider, useContainer, useStore } from 'evstore/react';
+import { Provider, useContainer, useStore } from 'evstore-react';
 
-const countStore = (container) => ({
-  initState: 0,
-  updater(setState, getState) {
-    container.on('increment', () => setState(getState() + 1));
-    container.on('decrement', () => setState((state) => state - 1));
-  },
-});
+const container = evstore.create();
 
-const store = evstore.create({
-  count: countStore,
+container.register('count', 0, (setState, getState) => {
+  container.on('increment', () => setState(getState() + 1));
+  container.on('decrement', () => setState(state => state - 1));
 });
 
 const Counter = () => {
@@ -31,10 +26,10 @@ const Counter = () => {
       <button onClick={() => container.emit('decrement')}>-</button>
     </>
   );
-};
+}
 
 const App = () => (
-  <Provider value={store}>
+  <Provider value={container}>
     <Counter />
   </Provider>
 );
