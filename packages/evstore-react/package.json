@@ -1,6 +1,6 @@
 {
   "name": "evstore-react",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "source": "src/index.js",
   "main": "dist/evstore-react.js",
   "module": "dist/evstore-react.module.js",
@@ -10,10 +10,11 @@
   "license": "MIT",
   "scripts": {
     "build": "rm -rf dist && microbundle",
-    "dev": "microbundle watch"
+    "dev": "microbundle watch",
+    "prepublishOnly": "yarn build"
   },
   "peerDependencies": {
-    "evstore": "^0.0.0",
+    "evstore": "^0.1.0",
     "react": "^16.8.0"
   },
   "devDependencies": {

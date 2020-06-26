@@ -1,4 +1,7 @@
 {
   "private": true,
-  "workspaces": ["packages/evstore", "packages/evstore-react"]
+  "workspaces": [
+    "packages/evstore",
+    "packages/evstore-react"
+  ]
 }
