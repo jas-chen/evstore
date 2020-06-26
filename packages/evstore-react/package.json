@@ -1,5 +1,5 @@
 {
-  "name": "evstore-react",
+  "name": "@jas-chen/evstore-react",
   "version": "0.1.0",
   "source": "src/index.js",
   "main": "dist/evstore-react.js",
@@ -14,7 +14,7 @@
     "prepublishOnly": "yarn build"
   },
   "peerDependencies": {
-    "evstore": "^0.1.0",
+    "@jas-chen/evstore": "^0.1.0",
     "react": "^16.8.0"
   },
   "devDependencies": {
