@@ -45,7 +45,7 @@ Update and watch a store
 ```
 container.on('time', console.log);
 
-container.register('time', 0, (setState) => {
+container.register('time', new Date(), (setState) => {
   setInterval(() => setState(new Date()), 1000);
 });
 ```
