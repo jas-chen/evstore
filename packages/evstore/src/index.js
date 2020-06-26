@@ -32,16 +32,19 @@ const evstore = {
       register(key, initState, setupStore) {
         keys.add(key);
         _setState(key, initState);
-        const getState = () => store.get(key);
-        const setState = (state) => {
-          const finalState =
-            typeof state === 'function' ? state(store.get(key)) : state;
 
-          _setState(key, finalState);
-          emit(key, finalState);
-        };
+        if (setupStore) {
+          const getState = () => store.get(key);
+          const setState = (state) => {
+            const finalState =
+              typeof state === 'function' ? state(store.get(key)) : state;
 
-        setupStore && setupStore(setState, getState);
+            _setState(key, finalState);
+            emit(key, finalState);
+          };
+
+          setupStore(setState, getState);
+        }
       },
     };
 
