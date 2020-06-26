@@ -12,6 +12,15 @@
 yarn add @jas-chen/evstore
 ```
 
+The [UMD](https://github.com/umdjs/umd) build is also available on [unpkg](https://unpkg.com):
+
+```html
+<script src="https://unpkg.com/mitt/dist/mitt.umd.js"></script>
+<script src="https://unpkg.com/@jas-chen/evstore/dist/evstore.umd.js"></script>
+```
+
+You can find the library on `window.evstore`.
+
 ## Usage
 
 It's an event emitter just like [mitt](https://github.com/developit/mitt)
