@@ -45,9 +45,13 @@ Update and watch a store
 ```
 container.on('time', console.log);
 
-container.register('time', new Date(), (setState) => {
-  setInterval(() => setState(new Date()), 1000);
-});
+container.register(
+  'time',
+  new Date(), // initial value
+  (setState, getState) => {
+    setInterval(() => setState(new Date()), 1000);
+  },
+);
 ```
 
 Once a store is registered, it cannot be emited from outside
