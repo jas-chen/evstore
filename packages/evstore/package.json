@@ -1,5 +1,6 @@
 {
   "name": "@jas-chen/evstore",
+  "description": "Event based state management library.",
   "version": "0.1.0",
   "source": "src/index.js",
   "main": "dist/evstore.js",

@@ -41,7 +41,7 @@ const evstore = {
           emit(key, finalState);
         };
 
-        setupStore(setState, getState);
+        setupStore && setupStore(setState, getState);
       },
     };
 
