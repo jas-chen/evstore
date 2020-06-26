@@ -1,5 +1,6 @@
 {
   "name": "@jas-chen/evstore-react",
+  "description": "React binding for @jas-chen/evstore.",
   "version": "0.1.0",
   "source": "src/index.js",
   "main": "dist/evstore-react.js",
