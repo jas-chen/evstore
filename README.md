@@ -1,4 +1,4 @@
-![build status](https://github.com/jas-chen/evstore/workflows/CI/badge.svg)
+[![build status](https://github.com/jas-chen/evstore/workflows/CI/badge.svg)](https://github.com/jas-chen/evstore/actions)
 
 # evstore
 [![npm version](https://img.shields.io/npm/v/@jas-chen/evstore.svg?style=flat-square)](https://www.npmjs.com/package/@jas-chen/evstore) [![gzip size](https://img.shields.io/bundlephobia/minzip/@jas-chen/evstore.svg?style=flat-square)](https://bundlephobia.com/result?p=@jas-chen/evstore)
