@@ -2,6 +2,10 @@
   "name": "@jas-chen/evstore",
   "description": "Event based state management library.",
   "version": "0.3.0",
+  "engines": {
+    "node": ">=13.2.0"
+  },
+  "type": "module",
   "source": "src/index.js",
   "main": "dist/evstore.js",
   "module": "dist/evstore.module.js",
@@ -12,12 +16,23 @@
   "scripts": {
     "build": "rm -rf dist && microbundle --globals mitt=mitt",
     "dev": "microbundle watch",
-    "prepublishOnly": "yarn build"
+    "prepublishOnly": "yarn build",
+    "test": "node --experimental-vm-modules ../../node_modules/jest/bin/jest.js"
   },
   "dependencies": {
     "mitt": "^1.2.0"
   },
   "devDependencies": {
+    "jest": "^26.1.0",
     "microbundle": "^0.12.2"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "coverageReporters": ["html"],
+    "transform": {},
+    "testEnvironment": "jest-environment-node",
+    "modulePaths": [
+      "<rootDir>/src"
+    ]
   }
 }

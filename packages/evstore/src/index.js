@@ -8,10 +8,18 @@ const evstore = {
     const keys = new Set();
     const { on, off, emit } = mitt();
 
+    const checkKey = (key) => {
+      if (keys.has(key)) {
+        throw new Error(
+          `Event type \`${key.toString()}\` can only be emitted from it's registrant`
+        );
+      }
+    }
+
     const _setState = (key, state) => {
       if (state === undefined) {
         throw new Error(
-          `Setting state \`${key}\` to undefined is not allowed, please set to null instead.`
+          `Setting state \`${key.toString()}\` to undefined is not allowed, please set to null instead.`
         );
       }
 
@@ -29,15 +37,11 @@ const evstore = {
       },
       off,
       emit(type, evt) {
-        if (keys.has(type)) {
-          throw new Error(
-            `Event type \`${type}\` can only be emitted from it's registrant`
-          );
-        }
-
+        checkKey(type);
         return emit(type, evt);
       },
       register(key, initState, setupStore) {
+        checkKey(key);
         keys.add(key);
         _setState(key, initState);
 
