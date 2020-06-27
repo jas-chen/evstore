@@ -1,7 +1,7 @@
 {
   "name": "@jas-chen/evstore-react",
   "description": "React binding for @jas-chen/evstore.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "source": "src/index.js",
   "main": "dist/evstore-react.js",
   "module": "dist/evstore-react.module.js",
@@ -10,12 +10,12 @@
   "author": "Jas Chen <jaschen.tw@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "rm -rf dist && microbundle",
+    "build": "rm -rf dist && microbundle --globals react=React",
     "dev": "microbundle watch",
     "prepublishOnly": "yarn build"
   },
   "peerDependencies": {
-    "@jas-chen/evstore": "^0.1.0",
+    "@jas-chen/evstore": "^0.3.0",
     "react": "^16.8.0"
   },
   "devDependencies": {
