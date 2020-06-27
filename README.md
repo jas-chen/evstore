@@ -1,4 +1,5 @@
-# evstore [![npm version](https://img.shields.io/npm/v/@jas-chen/evstore.svg?style=flat-square)](https://www.npmjs.com/package/@jas-chen/evstore) [![gzip size](https://img.shields.io/bundlephobia/minzip/@jas-chen/evstore.svg?style=flat-square)](https://bundlephobia.com/result?p=@jas-chen/evstore)
+# evstore
+[![npm version](https://img.shields.io/npm/v/@jas-chen/evstore.svg?style=flat-square)](https://www.npmjs.com/package/@jas-chen/evstore) [![gzip size](https://img.shields.io/bundlephobia/minzip/@jas-chen/evstore.svg?style=flat-square)](https://bundlephobia.com/result?p=@jas-chen/evstore)
 
 > Event based state management library.
 
@@ -70,7 +71,8 @@ container.emit('time', 12345); // throws an error
 
 ------
 
-## evstore-react [![npm version](https://img.shields.io/npm/v/@jas-chen/evstore-react.svg?style=flat-square)](https://www.npmjs.com/package/@jas-chen/evstore-react) [![gzip size](https://img.shields.io/bundlephobia/minzip/@jas-chen/evstore-react.svg?style=flat-square)](https://bundlephobia.com/result?p=@jas-chen/evstore-react)
+# evstore-react
+[![npm version](https://img.shields.io/npm/v/@jas-chen/evstore-react.svg?style=flat-square)](https://www.npmjs.com/package/@jas-chen/evstore-react) [![gzip size](https://img.shields.io/bundlephobia/minzip/@jas-chen/evstore-react.svg?style=flat-square)](https://bundlephobia.com/result?p=@jas-chen/evstore-react)
 
 > React binding for @jas-chen/evstore
 
@@ -143,6 +145,9 @@ const App = () => (
 ReactDOM.render(<App />, document.getElementById('root'));
 
 ```
+## Browser Support
+
+This package uses [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map), [Set](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set) and [Symbol](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol), you may need polyfills for legacy browsers.
 
 ## License
 
