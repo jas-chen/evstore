@@ -1,8 +1,10 @@
 import mitt from 'mitt';
 
+const UNREGISTER = Symbol('UNREGISTER');
+
 const evstore = {
-  create() {
-    const store = new Map();
+  create(constants) {
+    const store = new Map(constants);
     const keys = new Set();
     const { on, off, emit } = mitt();
 
@@ -18,7 +20,13 @@ const evstore = {
 
     const container = {
       get: (key) => store.get(key),
-      on,
+      on: (type, handler) => {
+        on(type, handler);
+
+        return function off() {
+          container.off(type, handler);
+        }
+      },
       off,
       emit(type, evt) {
         if (keys.has(type)) {
@@ -45,11 +53,21 @@ const evstore = {
 
           setupStore(setState, getState);
         }
+
+        return function unregister() {
+          container.unregister(key);
+        }
+      },
+      unregister(key) {
+        emit(UNREGISTER, key);
+        keys.delete(key);
+        store.delete(key);
       },
     };
 
     return container;
   },
+  UNREGISTER,
 };
 
 export default evstore;

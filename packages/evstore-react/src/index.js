@@ -14,8 +14,7 @@ export const useContainer = () => React.useContext(Context);
 
 export const useOn = (container, type, callback) => {
   React.useEffect(() => {
-    container.on(type, callback);
-    return () => container.off(type, callback);
+    return container.on(type, callback);
   }, [container, callback]);
 }
 
