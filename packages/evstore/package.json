@@ -29,7 +29,7 @@
   "jest": {
     "collectCoverage": true,
     "coverageReporters": [
-      "html"
+      "text"
     ],
     "transform": {},
     "testEnvironment": "jest-environment-node",
