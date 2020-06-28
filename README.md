@@ -8,6 +8,7 @@
 - Framework agnostic
 - Code-splittable stores
 - One place to update state, makes it easy to debug
+- Stores can be freely combined
 - Powered by [mitt](https://github.com/developit/mitt)
 
 ## Install
