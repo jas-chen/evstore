@@ -21,14 +21,18 @@ describe('create with constants', () => {
 
 describe('set constant value', () => {
   const container = evstore.create();
+  const onRegister = jest.fn();
+  container.on(container.REGISTER, onRegister);
 
   test('value set', () => {
     container.register('year', 2020);
     expect(container.get('year')).toBe(2020);
+    expect(onRegister.mock.calls[0][0]).toBe('year');
 
     const YEAR = Symbol('YEAR')
     container.register(YEAR, 2020);
     expect(container.get(YEAR)).toBe(2020);
+    expect(onRegister.mock.calls[1][0]).toBe(YEAR);
   });
 
   test('cannot set again', () => {
@@ -49,7 +53,7 @@ describe('set constant value', () => {
 
   test('container.unregister', () => {
     const mockFn = jest.fn();
-    container.on(evstore.UNREGISTER, mockFn);
+    container.on(container.UNREGISTER, mockFn);
     container.register('yo', 'hi');
     container.unregister('yo');
     expect(mockFn.mock.calls[0][0]).toBe('yo');
@@ -105,10 +109,12 @@ describe('stores', () => {
 
   test('update state, string as key', () => {
     const mockFn = jest.fn();
+    const cleanUp = jest.fn();
 
-    container.register('count', 0, (setState, getState) => {
+    const unregister = container.register('count', 0, (setState, getState) => {
       container.on('increment', () => setState(state => state + 1));
       container.on('decrement', () => setState(getState() - 1));
+      return () => cleanUp('cleanUp');
     });
 
     expect(container.get('count')).toBe(0);
@@ -125,15 +131,20 @@ describe('stores', () => {
     expect(() => {
       container.emit('count');
     }).toThrow();
+
+    unregister();
+    expect(cleanUp.mock.calls[0][0]).toBe('cleanUp');
   });
 
   test('update state, Symbol as key', () => {
     const mockFn = jest.fn();
+    const cleanUp = jest.fn();
     const COUNT = Symbol('COUNT');
 
-    container.register(COUNT, 0, (setState, getState) => {
+    const unregister = container.register(COUNT, 0, (setState, getState) => {
       container.on('increment', () => setState(state => state + 1));
       container.on('decrement', () => setState(getState() - 1));
+      return () => cleanUp('cleanUp');
     });
 
     expect(container.get(COUNT)).toBe(0);
@@ -150,5 +161,8 @@ describe('stores', () => {
     expect(() => {
       container.emit(COUNT);
     }).toThrow();
+
+    unregister();
+    expect(cleanUp.mock.calls[0][0]).toBe('cleanUp');
   });
 });

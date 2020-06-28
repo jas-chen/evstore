@@ -1,12 +1,15 @@
 import mitt from 'mitt';
 
-const UNREGISTER = Symbol('UNREGISTER');
+const noop = () => {};
 
 const evstore = {
   create(constants) {
+    const REGISTER = Symbol('REGISTER');
+    const UNREGISTER = Symbol('UNREGISTER');
     const store = new Map(constants);
     const keys = new Set();
     const { on, off, emit } = mitt();
+    const cleanUp = new Map();
 
     const checkKey = (key) => {
       if (keys.has(key)) {
@@ -14,7 +17,7 @@ const evstore = {
           `Event type \`${key.toString()}\` can only be emitted from it's registrant`
         );
       }
-    }
+    };
 
     const _setState = (key, state) => {
       if (state === undefined) {
@@ -33,17 +36,18 @@ const evstore = {
 
         return function off() {
           container.off(type, handler);
-        }
+        };
       },
       off,
       emit(type, evt) {
         checkKey(type);
-        return emit(type, evt);
+        emit(type, evt);
       },
       register(key, initState, setupStore) {
         checkKey(key);
         keys.add(key);
         _setState(key, initState);
+        let cleanUpFn;
 
         if (setupStore) {
           const getState = () => store.get(key);
@@ -55,23 +59,29 @@ const evstore = {
             emit(key, finalState);
           };
 
-          setupStore(setState, getState);
+          cleanUpFn = setupStore(setState, getState);
         }
+
+        cleanUp.set(key, cleanUpFn || noop);
+        emit(REGISTER, key);
 
         return function unregister() {
           container.unregister(key);
-        }
+        };
       },
       unregister(key) {
+        cleanUp.get(key)();
         emit(UNREGISTER, key);
         keys.delete(key);
         store.delete(key);
+        cleanUp.delete(key);
       },
+      REGISTER,
+      UNREGISTER,
     };
 
     return container;
   },
-  UNREGISTER,
 };
 
 export default evstore;
