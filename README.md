@@ -146,8 +146,123 @@ const App = () => (
 );
 
 ReactDOM.render(<App />, document.getElementById('root'));
-
 ```
+
+#### Todo example
+```js
+import React from 'react';
+import ReactDOM from 'react-dom';
+import evstore from 'evstore';
+import { Provider, useContainer, useStore } from 'evstore-react';
+
+const container = evstore.create();
+
+container.register('todos', [], (setState, getState) => {
+  let id = 0;
+
+  container.on('ADD_TODO', (label) => {
+    setState(
+      getState().concat({
+        id: id++,
+        label,
+        completed: false,
+      })
+    );
+  });
+
+  container.on('DELETE_TODO', (id) => {
+    setState(getState().filter((todo) => todo.id !== id));
+  });
+
+  container.on('TOGGLE_TODO', (id) => {
+    setState(
+      getState().map((todo) => {
+        if (todo.id === id) {
+          return { ...todo, completed: !todo.completed };
+        } else {
+          return todo;
+        }
+      })
+    );
+  });
+});
+
+container.register('filter', 'ALL', (setState) => {
+  container.on('CHANGE_FILTER', setState);
+});
+
+container.register('filteredTodos', container.get('todos'), (setState) => {
+  const updateFilterTodos = () => {
+    const filter = container.get('filter');
+    const todos = container.get('todos');
+    setState(
+      filter === 'ALL'
+        ? todos
+        : todos.filter((todo) => todo.completed === (filter === 'COMPLETED'))
+    );
+  };
+
+  ['todos', 'filter'].forEach((key) => {
+    container.on(key, updateFilterTodos);
+  });
+});
+
+const TodoMVC = () => {
+  const inputRef = React.useRef();
+  const container = useContainer();
+  const todos = useStore(container, 'filteredTodos');
+  const filter = useStore(container, 'filter');
+  React.useEffect(() => inputRef.current.focus(), []);
+
+  return (
+    <>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          container.emit('ADD_TODO', inputRef.current.value);
+          e.target.reset();
+        }}
+      >
+        <input ref={inputRef} placeholder="What needs to be done?" />
+      </form>
+      <ul>
+        {todos.map(({ id, label, completed }) => (
+          <li key={id}>
+            {label}
+            <input
+              type="checkbox"
+              checked={completed}
+              onChange={() => container.emit('TOGGLE_TODO', id)}
+            />
+            <button onClick={() => container.emit('DELETE_TODO', id)}>
+              remove
+            </button>
+          </li>
+        ))}
+      </ul>
+      {['ALL', 'ACTIVE', 'COMPLETED'].map((filterKey) => (
+        <label key={filterKey}>
+          <input
+            type="radio"
+            checked={filter === filterKey}
+            onChange={() => container.emit('CHANGE_FILTER', filterKey)}
+          />
+          {filterKey}
+        </label>
+      ))}
+    </>
+  );
+};
+
+const App = () => (
+  <Provider value={container}>
+    <TodoMVC />
+  </Provider>
+);
+
+ReactDOM.render(<App />, document.getElementById('root'));
+```
+
 ## Browser Support
 
 This package uses [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map), [Set](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set) and [Symbol](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol), you may need polyfills for legacy browsers.
