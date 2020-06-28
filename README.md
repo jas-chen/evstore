@@ -72,6 +72,9 @@ Once a store is registered, it cannot be emited from outside
 container.emit('time', 12345); // throws an error
 ```
 
+## API
+TBD
+
 ------
 
 # evstore-react
