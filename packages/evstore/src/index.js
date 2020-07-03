@@ -43,7 +43,6 @@ const evstore = {
           );
         }
 
-        emit(REGISTER, key);
         _setState(key, initState);
 
         if (setupStore) {
@@ -61,6 +60,8 @@ const evstore = {
           cleanUpFn && cleanUp.set(key, cleanUpFn);
         }
 
+        emit(REGISTER, key);
+
         return function unregister() {
           container.unregister(key);
         };
@@ -70,10 +71,10 @@ const evstore = {
 
         const cleanUpFn = cleanUp.get(key);
         cleanUpFn && cleanUpFn();
-        emit(UNREGISTER, key);
         updaters.delete(key);
         store.delete(key);
         cleanUp.delete(key);
+        emit(UNREGISTER, key);
       },
       has: (key) => store.has(key),
     };
