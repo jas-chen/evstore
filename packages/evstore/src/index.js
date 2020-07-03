@@ -9,17 +9,8 @@ const evstore = {
   create(constants) {
     const store = new Map(constants);
     const updaters = new Map();
-    const keys = new Set();
     const { on, off, emit } = mitt();
     const cleanUp = new Map();
-
-    const checkKey = (key) => {
-      if (keys.has(key)) {
-        throw new Error(
-          `Event type \`${key.toString()}\` can only be emitted from it's registrant`
-        );
-      }
-    };
 
     const _setState = (key, state) => {
       store.set(key, state);
@@ -37,12 +28,21 @@ const evstore = {
       },
       off,
       emit(type, evt) {
-        checkKey(type);
+        if (store.has(type)) {
+          throw new Error(
+            `Event type \`${type.toString()}\` can only be emitted from it's registrant.`
+          );
+        }
+
         emit(type, evt);
       },
       register(key, initState, setupStore) {
-        checkKey(key);
-        keys.add(key);
+        if (store.has(key)) {
+          throw new Error(
+            `Store \`${key.toString()}\` has been registered.`
+          );
+        }
+
         emit(REGISTER, key);
         _setState(key, initState);
 
@@ -66,12 +66,11 @@ const evstore = {
         };
       },
       unregister(key) {
-        if (!keys.has(key)) return;
+        if (!store.has(key)) return;
 
         const cleanUpFn = cleanUp.get(key);
         cleanUpFn && cleanUpFn();
         emit(UNREGISTER, key);
-        keys.delete(key);
         updaters.delete(key);
         store.delete(key);
         cleanUp.delete(key);
