@@ -1,7 +1,7 @@
 {
   "name": "@jas-chen/evstore",
   "description": "Event based state management library.",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "engines": {
     "node": ">=13.2.0"
   },
