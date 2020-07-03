@@ -36,7 +36,7 @@ const evstore = {
 
         emit(type, evt);
       },
-      register(key, initState, setupStore) {
+      register(key, initState, updater) {
         if (store.has(key)) {
           throw new Error(
             `Store \`${key.toString()}\` has been registered.`
@@ -45,18 +45,18 @@ const evstore = {
 
         _setState(key, initState);
 
-        if (setupStore) {
-          updaters.set(key, setupStore);
+        if (updater) {
+          updaters.set(key, updater);
           const getState = () => store.get(key);
           const setState = (state) => {
-            if (updaters.get(key) !== setupStore) return;
+            if (updaters.get(key) !== updater) return;
             const finalState =
               typeof state === 'function' ? state(store.get(key)) : state;
 
             _setState(key, finalState);
           };
 
-          const cleanUpFn = setupStore(setState, getState);
+          const cleanUpFn = updater(setState, getState);
           cleanUpFn && cleanUp.set(key, cleanUpFn);
         }
 
