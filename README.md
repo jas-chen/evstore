@@ -66,10 +66,8 @@ container.unregister('year');
 
 Update and listen to a store
 ```js
-// listen to store changes
 container.on('time', console.log);
 
-// create store with an updater
 container.register(
   'time',
   new Date(), // initial value
