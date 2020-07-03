@@ -44,21 +44,32 @@ container.emit('foo', { a: 'b' })
 
 // working with handler references:
 function onFoo() {}
-container.on('foo', onFoo)   // listen
+const unlisten = container.on('foo', onFoo)   // listen
 container.off('foo', onFoo)  // unlisten
+unlisten() // shortcut to unlisten
 ```
 
 However you can create stores and store values on it
 ```js
+// create a store
 container.register('year', 2020);
+
+// get state
 container.get('year'); // 2020
+
+// check if a store is exist
 container.has('year'); // true
+
+// remove a store
+container.unregister('year');
 ```
 
-Update and watch a store
+Update and listen to a store
 ```js
+// listen to store changes
 container.on('time', console.log);
 
+// create store with an updater
 container.register(
   'time',
   new Date(), // initial value
