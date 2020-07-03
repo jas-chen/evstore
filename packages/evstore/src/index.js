@@ -9,6 +9,7 @@ const evstore = {
   UNREGISTER,
   create(constants) {
     const store = new Map(constants);
+    const updaters = new Map();
     const keys = new Set();
     const { on, off, emit } = mitt();
     const cleanUp = new Map();
@@ -48,8 +49,10 @@ const evstore = {
         let cleanUpFn;
 
         if (setupStore) {
+          updaters.set(key, setupStore);
           const getState = () => store.get(key);
           const setState = (state) => {
+            if (updaters.get(key) !== setupStore) return;
             const finalState =
               typeof state === 'function' ? state(store.get(key)) : state;
 
@@ -69,6 +72,7 @@ const evstore = {
         cleanUp.get(key)();
         emit(UNREGISTER, key);
         keys.delete(key);
+        updaters.delete(key);
         store.delete(key);
         cleanUp.delete(key);
       },
