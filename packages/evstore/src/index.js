@@ -1,11 +1,13 @@
 import mitt from 'mitt';
 
 const noop = () => {};
+const REGISTER = Symbol('REGISTER');
+const UNREGISTER = Symbol('UNREGISTER');
 
 const evstore = {
+  REGISTER,
+  UNREGISTER,
   create(constants) {
-    const REGISTER = Symbol('REGISTER');
-    const UNREGISTER = Symbol('UNREGISTER');
     const store = new Map(constants);
     const keys = new Set();
     const { on, off, emit } = mitt();
@@ -20,13 +22,8 @@ const evstore = {
     };
 
     const _setState = (key, state) => {
-      if (state === undefined) {
-        throw new Error(
-          `Setting state \`${key.toString()}\` to undefined is not allowed, please set to null instead.`
-        );
-      }
-
       store.set(key, state);
+      emit(key, state);
     };
 
     const container = {
@@ -46,6 +43,7 @@ const evstore = {
       register(key, initState, setupStore) {
         checkKey(key);
         keys.add(key);
+        emit(REGISTER, key);
         _setState(key, initState);
         let cleanUpFn;
 
@@ -56,14 +54,12 @@ const evstore = {
               typeof state === 'function' ? state(store.get(key)) : state;
 
             _setState(key, finalState);
-            emit(key, finalState);
           };
 
           cleanUpFn = setupStore(setState, getState);
         }
 
         cleanUp.set(key, cleanUpFn || noop);
-        emit(REGISTER, key);
 
         return function unregister() {
           container.unregister(key);
@@ -76,8 +72,7 @@ const evstore = {
         store.delete(key);
         cleanUp.delete(key);
       },
-      REGISTER,
-      UNREGISTER,
+      has: (key) => store.has(key),
     };
 
     return container;
