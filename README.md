@@ -52,6 +52,7 @@ However you can create stores and store values on it
 ```js
 container.register('year', 2020);
 container.get('year'); // 2020
+container.has('year'); // true
 ```
 
 Update and watch a store
