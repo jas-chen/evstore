@@ -69,10 +69,9 @@ const evstore = {
       unregister(key) {
         if (!store.has(key)) return;
 
-        const cleanUpFn = cleanUp.get(key);
-        cleanUpFn && cleanUpFn();
-        updaters.delete(key);
+        cleanUp.has(key) && cleanUp.get(key)();
         store.delete(key);
+        updaters.delete(key);
         cleanUp.delete(key);
         emit(UNREGISTER, key);
       },
