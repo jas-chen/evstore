@@ -179,4 +179,19 @@ describe('stores', () => {
     unregister();
     expect(cleanUp.mock.calls[0][0]).toBe('cleanUp');
   });
+
+  test("don't do register if updater throws", () => {
+    const mockFn = jest.fn();
+    container.on(evstore.REGISTER, mockFn);
+    container.on('count', mockFn);
+
+    try {
+      container.register('count', 0, () => {
+        throw new Error();
+      });
+    } catch(e) {}
+
+    expect(container.has('count')).toBe(false);
+    expect(mockFn.mock.calls.length).toBe(0);
+  });
 });
