@@ -1,6 +1,5 @@
 import mitt from 'mitt';
 
-const noop = () => {};
 const REGISTER = Symbol('REGISTER');
 const UNREGISTER = Symbol('UNREGISTER');
 
@@ -46,7 +45,6 @@ const evstore = {
         keys.add(key);
         emit(REGISTER, key);
         _setState(key, initState);
-        let cleanUpFn;
 
         if (setupStore) {
           updaters.set(key, setupStore);
@@ -59,17 +57,19 @@ const evstore = {
             _setState(key, finalState);
           };
 
-          cleanUpFn = setupStore(setState, getState);
+          const cleanUpFn = setupStore(setState, getState);
+          cleanUpFn && cleanUp.set(key, cleanUpFn);
         }
-
-        cleanUp.set(key, cleanUpFn || noop);
 
         return function unregister() {
           container.unregister(key);
         };
       },
       unregister(key) {
-        cleanUp.get(key)();
+        if (!keys.has(key)) return;
+
+        const cleanUpFn = cleanUp.get(key);
+        cleanUpFn && cleanUpFn();
         emit(UNREGISTER, key);
         keys.delete(key);
         updaters.delete(key);

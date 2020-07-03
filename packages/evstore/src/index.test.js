@@ -44,13 +44,19 @@ describe('set constant value', () => {
   });
 
   test('container.unregister', () => {
-    const mockFn = jest.fn();
-    container.on(evstore.UNREGISTER, mockFn);
+    const onUnregister = jest.fn();
+    container.on(evstore.UNREGISTER, onUnregister);
     container.register('yo', 'hi');
     expect(container.has('yo')).toBe(true);
     container.unregister('yo');
     expect(container.has('yo')).toBe(false);
-    expect(mockFn.mock.calls[0][0]).toBe('yo');
+    expect(onUnregister.mock.calls[0][0]).toBe('yo');
+    expect(onUnregister.mock.calls.length).toBe(1);
+
+    // call unregister on an unregistered store
+    container.unregister('yo');
+    expect(onUnregister.mock.calls.length).toBe(1);
+
     container.register('yo', 'hey');
     expect(container.get('yo')).toBe('hey');
   });
