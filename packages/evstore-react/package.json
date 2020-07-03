@@ -1,7 +1,7 @@
 {
   "name": "@jas-chen/evstore-react",
   "description": "React binding for @jas-chen/evstore.",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "source": "src/index.js",
   "main": "dist/evstore-react.js",
   "module": "dist/evstore-react.module.js",
