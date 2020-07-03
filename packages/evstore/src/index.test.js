@@ -20,30 +20,41 @@ describe('create with constants', () => {
 });
 
 describe('set constant value', () => {
-  const container = evstore.create();
-  const onRegister = jest.fn();
-  container.on(evstore.REGISTER, onRegister);
-
-  test('value set', () => {
+  test('register with string key', () => {
+    const container = evstore.create();
+    const mockFn = jest.fn();
+    container.on(evstore.REGISTER, mockFn);
+    container.on('year', mockFn);
     container.register('year', 2020);
     expect(container.has('year')).toBe(true);
     expect(container.get('year')).toBe(2020);
-    expect(onRegister.mock.calls[0][0]).toBe('year');
+    expect(mockFn.mock.calls[0][0]).toBe('year');
+    expect(mockFn.mock.calls[1][0]).toBe(2020);
+  });
 
-    const YEAR = Symbol('YEAR')
+  test('register with Symbol key', () => {
+    const YEAR = Symbol('YEAR');
+    const container = evstore.create();
+    const mockFn = jest.fn();
+    container.on(evstore.REGISTER, mockFn);
+    container.on(YEAR, mockFn);
     container.register(YEAR, 2020);
     expect(container.has(YEAR)).toBe(true);
     expect(container.get(YEAR)).toBe(2020);
-    expect(onRegister.mock.calls[1][0]).toBe(YEAR);
+    expect(mockFn.mock.calls[0][0]).toBe(YEAR);
+    expect(mockFn.mock.calls[1][0]).toBe(2020);
   });
 
   test('cannot set again', () => {
+    const container = evstore.create();
+    container.register('year', 2020);
     expect(() => {
       container.register('year', 2021);
     }).toThrow();
   });
 
   test('container.unregister', () => {
+    const container = evstore.create();
     const onUnregister = jest.fn();
     container.on(evstore.UNREGISTER, onUnregister);
     container.register('yo', 'hi');
@@ -62,6 +73,7 @@ describe('set constant value', () => {
   });
 
   test('returned unregister', () => {
+    const container = evstore.create();
     const unregister = container.register('pet', 'dog');
     expect(container.has('pet')).toBe(true);
     unregister();

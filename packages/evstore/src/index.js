@@ -43,10 +43,7 @@ const evstore = {
           );
         }
 
-        _setState(key, initState);
-
         if (updater) {
-          updaters.set(key, updater);
           const getState = () => store.get(key);
           const setState = (state) => {
             if (updaters.get(key) !== updater) return;
@@ -57,10 +54,12 @@ const evstore = {
           };
 
           const cleanUpFn = updater(setState, getState);
+          updaters.set(key, updater);
           cleanUpFn && cleanUp.set(key, cleanUpFn);
         }
 
         emit(REGISTER, key);
+        _setState(key, initState);
 
         return function unregister() {
           container.unregister(key);
