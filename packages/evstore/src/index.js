@@ -8,7 +8,6 @@ const evstore = {
   UNREGISTER,
   create(constants) {
     const store = new Map(constants);
-    const updaters = new Map();
     const { on, off, emit } = mitt();
     const cleanUp = new Map();
 
@@ -44,9 +43,10 @@ const evstore = {
         }
 
         if (updater) {
+          let unregistered = false;
           const getState = () => store.get(key);
           const setState = (state) => {
-            if (updaters.get(key) !== updater) return;
+            if (unregistered) return;
             const finalState =
               typeof state === 'function' ? state(store.get(key)) : state;
 
@@ -54,7 +54,13 @@ const evstore = {
           };
 
           const cleanUpFn = updater(setState, getState);
-          updaters.set(key, updater);
+          on(UNREGISTER, function listenUnregister(unresisterKey) {
+            if (unresisterKey === key) {
+              unregistered = true;
+              off(UNREGISTER, listenUnregister);
+            }
+          });
+
           cleanUpFn && cleanUp.set(key, cleanUpFn);
         }
 
@@ -70,7 +76,6 @@ const evstore = {
 
         cleanUp.has(key) && cleanUp.get(key)();
         store.delete(key);
-        updaters.delete(key);
         cleanUp.delete(key);
         emit(UNREGISTER, key);
       },

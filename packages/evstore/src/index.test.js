@@ -119,9 +119,8 @@ describe('event system', () => {
 
 
 describe('stores', () => {
-  const container = evstore.create();
-
   test('update state, string as key', () => {
+    const container = evstore.create();
     const mockFn = jest.fn();
     const cleanUp = jest.fn();
 
@@ -151,6 +150,7 @@ describe('stores', () => {
   });
 
   test('update state, Symbol as key', () => {
+    const container = evstore.create();
     const mockFn = jest.fn();
     const cleanUp = jest.fn();
     const COUNT = Symbol('COUNT');
@@ -181,6 +181,7 @@ describe('stores', () => {
   });
 
   test("don't do register if updater throws", () => {
+    const container = evstore.create();
     const mockFn = jest.fn();
     container.on(evstore.REGISTER, mockFn);
     container.on('count', mockFn);
@@ -193,5 +194,25 @@ describe('stores', () => {
 
     expect(container.has('count')).toBe(false);
     expect(mockFn.mock.calls.length).toBe(0);
+  });
+
+  test('unregisted store cannot emit', () => {
+    const container = evstore.create();
+    const mockFn = jest.fn();
+
+    container.on('count', mockFn);
+
+    const updater = (setState) => {
+      container.on('test', () => setState((s) => s + '1'));
+    }
+
+    const unregister = container.register('count', 'old', updater);
+
+    unregister();
+
+    container.register('count', 'new', updater);
+
+    container.emit('test');
+    expect(mockFn.mock.calls.length).toBe(3);
   });
 });
