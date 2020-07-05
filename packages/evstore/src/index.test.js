@@ -115,6 +115,16 @@ describe('event system', () => {
     container.emit(type, 1);
     expect(mockFn.mock.calls.length).toBe(0);
   });
+
+  test('cannot emit internal events', () => {
+    expect(() => {
+      container.emit(evstore.REGISTER);
+    }).toThrow();
+
+    expect(() => {
+      container.emit(evstore.UNREGISTER);
+    }).toThrow();
+  });
 });
 
 

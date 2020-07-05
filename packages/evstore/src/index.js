@@ -27,6 +27,12 @@ const evstore = {
       },
       off,
       emit(type, evt) {
+        if (type === REGISTER || type === UNREGISTER) {
+          throw new Error(
+            `Event type \`${type.toString()}\` cannot be emitted.`
+          );
+        }
+
         if (store.has(type)) {
           throw new Error(
             `Event type \`${type.toString()}\` can only be emitted from it's registrant.`
